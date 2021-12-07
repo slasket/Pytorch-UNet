@@ -10,12 +10,13 @@ from torch.utils.data import Dataset
 
 
 class BasicDataset(Dataset):
-    def __init__(self, images_dir: str, masks_dir: str, scale: float = 1.0, mask_suffix: str = ''):
+    def __init__(self, images_dir: str, masks_dir: str, scale: float = 1.0, transform=None, mask_suffix: str = ''):
         self.images_dir = Path(images_dir)
         self.masks_dir = Path(masks_dir)
         assert 0 < scale <= 1, 'Scale must be between 0 and 1'
         self.scale = scale
         self.mask_suffix = mask_suffix
+        self.transform = transform
 
         self.ids = [splitext(file)[0] for file in listdir(images_dir) if not file.startswith('.')]
         if not self.ids:
@@ -66,6 +67,15 @@ class BasicDataset(Dataset):
         assert img.size == mask.size, \
             'Image and mask {name} should be the same size, but are {img.size} and {mask.size}'
 
+        if self.transform is not None:
+            img_asarray = np.array(img)
+            mask_asarray = np.array(mask)
+            transformed = self.transform(image=img_asarray, mask=mask_asarray)
+            img_asarray = transformed["image"]
+            mask_asarray = transformed["mask"]
+            img = Image.fromarray(img_asarray)
+            mask = Image.fromarray(mask_asarray)
+
         img = self.preprocess(img, self.scale, is_mask=False)
         mask = self.preprocess(mask, self.scale, is_mask=True)
 
@@ -76,5 +86,5 @@ class BasicDataset(Dataset):
 
 
 class CarvanaDataset(BasicDataset):
-    def __init__(self, images_dir, masks_dir, scale=1):
-        super().__init__(images_dir, masks_dir, scale, mask_suffix='_mask')
+    def __init__(self, images_dir, masks_dir, scale=1, transform=None):
+        super().__init__(images_dir, masks_dir, scale, transform, mask_suffix='_mask')

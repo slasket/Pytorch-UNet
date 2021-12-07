@@ -16,9 +16,18 @@ from utils.dice_score import dice_loss
 from evaluate import evaluate
 from unet import UNet
 
+import albumentations as A
+
 dir_img = Path('./data/imgs/')
 dir_mask = Path('./data/masks/')
 dir_checkpoint = Path('./checkpoints/')
+
+transform = A.Compose([
+    A.RGBShift(r_shift_limit=20, g_shift_limit=20, b_shift_limit=20, p=0.5),
+    A.GaussNoise(p=0.5),
+    A.RandomBrightnessContrast(p=0.5),
+    A.ToGray(p=0.5),
+])
 
 
 def train_net(net,
@@ -32,9 +41,9 @@ def train_net(net,
               amp: bool = False):
     # 1. Create dataset
     try:
-        dataset = CarvanaDataset(dir_img, dir_mask, img_scale)
+        dataset = CarvanaDataset(dir_img, dir_mask, img_scale, transform)
     except (AssertionError, RuntimeError):
-        dataset = BasicDataset(dir_img, dir_mask, img_scale)
+        dataset = BasicDataset(dir_img, dir_mask, img_scale, transform)
 
     # 2. Split into train / validation partitions
     n_val = int(len(dataset) * val_percent)
