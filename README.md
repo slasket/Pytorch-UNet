@@ -13,12 +13,11 @@ pip install -r requirements.txt
 ```bash
 bash scripts/download_data.sh
 ```
-
 4. Training the network
 ```bash
 python train.py --amp
 ```
-
+The following text is taken from the original github:
 ### Running locally
 
 1. [Install CUDA](https://developer.nvidia.com/cuda-downloads)
