@@ -1,29 +1,25 @@
-# U-Net: Semantic segmentation with PyTorch
-<a href="#"><img src="https://img.shields.io/github/workflow/status/milesial/PyTorch-UNet/Publish%20Docker%20image?logo=github&style=for-the-badge" /></a>
-<a href="https://hub.docker.com/r/milesial/unet"><img src="https://img.shields.io/badge/docker%20image-available-blue?logo=Docker&style=for-the-badge" /></a>
-<a href="https://pytorch.org/"><img src="https://img.shields.io/badge/PyTorch-v1.9.0-red.svg?logo=PyTorch&style=for-the-badge" /></a>
-<a href="#"><img src="https://img.shields.io/badge/python-v3.6+-blue.svg?logo=python&style=for-the-badge" /></a>
+# Deep Learning for Visual Recognition project: U-Net for semantic segmentation.
+This is a fork of milesial's U-Net: https://github.com/milesial/Pytorch-UNet, For the Carvana image segmentation competition.
+The fork was used for our course on Deep Learning for Visual Recognition.
 
-![input and output for a random image in the test dataset](https://i.imgur.com/GD8FcB7.png)
+### Cloning in Google collab
 
+1. Clone the repo in collab
+2. Install dependencies
+```bash
+pip install -r requirements.txt
+```
+3. Download the data(this requires a kaggle account to get an API Key)
+```bash
+bash scripts/download_data.sh
+```
 
-Customized implementation of the [U-Net](https://arxiv.org/abs/1505.04597) in PyTorch for Kaggle's [Carvana Image Masking Challenge](https://www.kaggle.com/c/carvana-image-masking-challenge) from high definition images.
+4. Training the network
+```bash
+python train.py --amp
+```
 
-- [Quick start](#quick-start)
-  - [Without Docker](#without-docker)
-  - [With Docker](#with-docker)
-- [Description](#description)
-- [Usage](#usage)
-  - [Docker](#docker)
-  - [Training](#training)
-  - [Prediction](#prediction)
-- [Weights & Biases](#weights--biases)
-- [Pretrained model](#pretrained-model)
-- [Data](#data)
-
-## Quick start
-
-### Without Docker
+### Running locally
 
 1. [Install CUDA](https://developer.nvidia.com/cuda-downloads)
 
@@ -39,52 +35,6 @@ pip install -r requirements.txt
 bash scripts/download_data.sh
 python train.py --amp
 ```
-
-### With Docker
-
-1. [Install Docker 19.03 or later:](https://docs.docker.com/get-docker/)
-```bash
-curl https://get.docker.com | sh && sudo systemctl --now enable docker
-```
-2. [Install the NVIDIA container toolkit:](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html)
-```bash
-distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
-   && curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add - \
-   && curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
-sudo apt-get update
-sudo apt-get install -y nvidia-docker2
-sudo systemctl restart docker
-```
-3. [Download and run the image:](https://hub.docker.com/repository/docker/milesial/unet)
-```bash
-sudo docker run --rm --shm-size=8g --ulimit memlock=-1 --gpus all -it milesial/unet
-```
-
-4. Download the data and run training:
-```bash
-bash scripts/download_data.sh
-python train.py --amp
-```
-
-## Description
-This model was trained from scratch with 5k images and scored a [Dice coefficient](https://en.wikipedia.org/wiki/S%C3%B8rensen%E2%80%93Dice_coefficient) of 0.988423 on over 100k test images.
-
-It can be easily used for multiclass segmentation, portrait segmentation, medical segmentation, ...
-
-
-## Usage
-**Note : Use Python 3.6 or newer**
-
-### Docker
-
-A docker image containing the code and the dependencies is available on [DockerHub](https://hub.docker.com/repository/docker/milesial/unet).
-You can download and jump in the container with ([docker >=19.03](https://docs.docker.com/get-docker/)):
-
-```console
-docker run -it --rm --shm-size=8g --ulimit memlock=-1 --gpus all milesial/unet
-```
-
-
 ### Training
 
 ```console
@@ -156,15 +106,6 @@ The training progress can be visualized in real-time using [Weights & Biases](ht
 
 When launching a training, a link will be printed in the console. Click on it to go to your dashboard. If you have an existing W&B account, you can link it
  by setting the `WANDB_API_KEY` environment variable.
-
-
-## Pretrained model
-A [pretrained model](https://github.com/milesial/Pytorch-UNet/releases/tag/v2.0) is available for the Carvana dataset. It can also be loaded from torch.hub:
-
-```python
-net = torch.hub.load('milesial/Pytorch-UNet', 'unet_carvana', pretrained=True)
-```
-The training was done with a 50% scale and bilinear upsampling.
 
 ## Data
 The Carvana data is available on the [Kaggle website](https://www.kaggle.com/c/carvana-image-masking-challenge/data).
