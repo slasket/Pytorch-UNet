@@ -22,6 +22,7 @@ The fork was used for our course on Deep Learning for Visual Recognition.
 !python train.py --amp
 ```
 By default the models are saved in the checkpoints folder, checkpoints are made whenever the model improves or an epoch has finished.
+
 5. Predicting
 ```bash
 !python predict.py -m PATH_TO_MODEL.pth -i PATH_TO_IMAGE.jpg -o OUTPUTFILE.jpg
