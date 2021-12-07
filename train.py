@@ -23,10 +23,10 @@ dir_mask = Path('./data/masks/')
 dir_checkpoint = Path('./checkpoints/')
 
 transform = A.Compose([
-    A.RGBShift(r_shift_limit=20, g_shift_limit=20, b_shift_limit=20, p=0.5),
-    A.GaussNoise(p=0.5),
-    A.RandomBrightnessContrast(p=0.5),
-    A.ToGray(p=0.5),
+    #A.RGBShift(r_shift_limit=20, g_shift_limit=20, b_shift_limit=20, p=0.5),
+    #A.GaussNoise(p=0.5),
+    #A.RandomBrightnessContrast(p=0.5),
+    #A.ToGray(p=0.5),
 ])
 
 
@@ -71,16 +71,18 @@ def train_net(net,
         Device:          {device.type}
         Images scaling:  {img_scale}
         Mixed Precision: {amp}
+        Momentum: {0.9}
     ''')
 
     # 4. Set up the optimizer, the loss, the learning rate scheduler and the loss scaling for AMP
-    optimizer = optim.RMSprop(net.parameters(), lr=learning_rate, weight_decay=1e-8, momentum=0.99)
+    optimizer = optim.RMSprop(net.parameters(), lr=learning_rate, weight_decay=1e-8, momentum=0.9)
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience=2)  # goal: maximize Dice score
     grad_scaler = torch.cuda.amp.GradScaler(enabled=amp)
     criterion = nn.CrossEntropyLoss()
     global_step = 0
 
     # 5. Begin training
+    bestSeenDiceVal= 0
     for epoch in range(epochs):
         net.train()
         epoch_loss = 0
@@ -148,7 +150,7 @@ def train_net(net,
                         # early stopping WIP
                         if epoch >= 1:
                             if val_score < bestSeenDiceVal:
-                                logging.info('Dice val didnt improve so we exit')
+                                logging.info(f'Dice val didnt improve so we exit')
                                 #exit(0)
                             else:
                                 bestSeenDiceVal = val_score
