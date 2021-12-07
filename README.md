@@ -2,20 +2,24 @@
 This is a fork of milesial's U-Net: https://github.com/milesial/Pytorch-UNet, For the Carvana image segmentation competition.
 The fork was used for our course on Deep Learning for Visual Recognition.
 
-### Cloning in Google collab
+### Cloning in Google colab
 
-1. Clone the repo in collab
-2. Install dependencies
+1. Clone the repo in colab
 ```bash
-pip install -r requirements.txt
+!git clone https://github.com/slasket/Pytorch-UNet
+!cd Pytorch-UNet
+```
+3. Install dependencies
+```bash
+!pip install -r requirements.txt
 ```
 3. Download the data(this requires a kaggle account to get an API Key)
 ```bash
-bash scripts/download_data.sh
+!bash scripts/download_data.sh
 ```
 4. Training the network
 ```bash
-python train.py --amp
+!python train.py --amp
 ```
 The following text is taken from the original github:
 ### Running locally
