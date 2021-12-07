@@ -6,4 +6,4 @@ torchvision
 tqdm
 wandb
 imgaug
-albumentation
+albumentations

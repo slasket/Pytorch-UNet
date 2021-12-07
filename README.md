@@ -7,7 +7,7 @@ The fork was used for our course on Deep Learning for Visual Recognition.
 1. Clone the repo in colab
 ```bash
 !git clone https://github.com/slasket/Pytorch-UNet
-!cd Pytorch-UNet
+%cd Pytorch-UNet
 ```
 3. Install dependencies
 ```bash
@@ -20,6 +20,11 @@ The fork was used for our course on Deep Learning for Visual Recognition.
 4. Training the network
 ```bash
 !python train.py --amp
+```
+By default the models are saved in the checkpoints folder, checkpoints are made whenever the model improves or an epoch has finished.
+5. Predicting
+```bash
+!python predict.py -m PATH_TO_MODEL.pth -i PATH_TO_IMAGE.jpg -o OUTPUTFILE.jpg
 ```
 The following text is taken from the original github:
 ### Running locally
