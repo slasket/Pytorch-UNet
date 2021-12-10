@@ -19,3 +19,4 @@ unzip train_masks.zip
 mv train_masks/* data/masks/
 rm -d train_masks
 rm train_masks.zip
+

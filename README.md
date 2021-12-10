@@ -13,9 +13,10 @@ The fork was used for our course on Deep Learning for Visual Recognition.
 ```bash
 !pip install -r requirements.txt
 ```
-3. Download the data(this requires a kaggle account to get an API Key)
+3. Download the training data(this requires a kaggle account to get an API Key). Optionally the test set can also be downloaded using the second bash script, this is however quite a large file(100.000 pictures).
 ```bash
 !bash scripts/download_data.sh
+!bash scripts/download_testset.sh
 ```
 4. Training the network
 ```bash
@@ -27,6 +28,9 @@ By default the models are saved in the checkpoints folder, checkpoints are made 
 ```bash
 !python predict.py -m PATH_TO_MODEL.pth -i PATH_TO_IMAGE.jpg -o OUTPUTFILE.jpg
 ```
+Note: by default all models are saved in the checkpoints folder. The test set is downloaded into /data/test/
+
+
 The following text is taken from the original github:
 ### Running locally
 
